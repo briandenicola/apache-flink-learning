@@ -26,6 +26,10 @@
 		}
 	},
 
+	"forwardPorts": [
+		8081
+	],
+
 	"waitFor": "postCreateCommand",
 	"postCreateCommand": "bash .devcontainer/post-create.sh",
 	"postStartCommand": "bash .devcontainer/post-start.sh"
