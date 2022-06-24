@@ -12,5 +12,21 @@
 		"azure-cli": "latest",
 		"java": "lts",
 		"maven": "latest"
-	}
+	},
+
+	"customizations": {
+		"vscode": {	
+			"extensions": [
+				"vscjava.vscode-java-pack",
+				"vscjava.vscode-maven",
+				"vscjava.vscode-java-debug",
+				"ms-azuretools.vscode-docker",
+				"ms-kubernetes-tools.vscode-kubernetes-tools"
+			]
+		}
+	},
+
+	"waitFor": "postCreateCommand",
+	"postCreateCommand": "bash .devcontainer/post-create.sh",
+	"postStartCommand": "bash .devcontainer/post-start.sh"
 }
