@@ -1,0 +1,17 @@
+{
+	"name": "Ubuntu",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": { "VARIANT": "ubuntu-22.04" }
+	},
+
+	"features": {
+		"docker-from-docker": "latest",
+		"kubectl-helm-minikube": "latest",
+		"terraform": "latest",
+		"azure-cli": "latest",
+		"java": "lts",
+		"maven": "latest",
+		"powershell": "latest"
+	}
+}
