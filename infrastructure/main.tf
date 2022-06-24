@@ -1,5 +1,4 @@
 data "azurerm_client_config" "current" {}
-
 data "http" "myip" {
   url = "http://checkip.amazonaws.com/"
 }
@@ -19,19 +18,12 @@ resource "random_password" "password" {
 }
 
 locals {
-    location                    = "southcentralus"
-    resource_name               = "${random_pet.this.id}-${random_id.this.dec}"
+  location              = "southcentralus"
+  resource_name         = "${random_pet.this.id}-${random_id.this.dec}"
+  aks_name              = "${local.resource_name}-aks"
 }
-
-
+    
 resource "azurerm_resource_group" "this" {
   name                  = "${local.resource_name}_rg"
   location              = local.location
-  
-  tags     = {
-    Application = ""
-    Components  = ""
-    DeployedOn  = timestamp()
-    Deployer    = data.azurerm_client_config.current.principal_id
-  }
 }
