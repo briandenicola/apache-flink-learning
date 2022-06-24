@@ -4,8 +4,9 @@
 
 echo "$(date)    post-start start" >> ~/status
 
-alias k=kubectl
-source <(kubectl completion bash)
-complete -F __start_kubectl k
+echo . /etc/bash_completion >> ~/.bashrc
+echo alias k=kubectl >> ~/.bashrc
+echo 'source <(kubectl completion bash)' >> ~/.bashrc 
+echo complete -F __start_kubectl k >> ~/.bashrc
 
 echo "$(date)    post-start complete" >> ~/status
