@@ -11,7 +11,8 @@
 		"terraform": "latest",
 		"azure-cli": "latest",
 		"java": "lts",
-		"maven": "latest"
+		"maven": "latest",
+		"python": "3.9"
 	},
 
 	"customizations": {
