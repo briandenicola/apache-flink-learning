@@ -5,9 +5,12 @@ echo "$(date)    post-create start" >> ~/status
 
 echo "$(date)    Create Flink minikube cluster" >> ~/status
 minikube start --kubernetes-version=v1.21.5 --force
-kubectl create -f https://github.com/jetstack/cert-manager/releases/download/v1.7.1/cert-manager.yaml
-helm repo add flink-operator-repo https://downloads.apache.org/flink/flink-kubernetes-operator-1.0.1/
+
+helm repo add flink-operator-repo https://downloads.apache.org/flink/flink-kubernetes-operator-1.0.1/helm 
+helm repo add jetstack https://charts.jetstack.io
 helm repo update
+
+helm upgrade -i cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.8.2  --set installCRDs=true --wait
 helm upgrade -i flink-kubernetes-operator flink-operator-repo/flink-kubernetes-operator --namespace flink --create-namespace
 
 echo "$(date)    Download flink" >> ~/status
