@@ -12,6 +12,7 @@ echo complete -F __start_kubectl k >> ~/.bashrc
 echo "$(date)    Create Flink minikube cluster" >> ~/status
 minikube start --kubernetes-version=v1.21.5 --force
 #kubectl create sa flink
+#kubectl create rolebinding flink-operator --clusterrole=flink-operator --serviceaccount=default:flink
 #kubectl create -f https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.0.1/examples/basic.yaml
 #kubectl get pods
 #kubectl port-forward svc/basic-example-rest 8081 
