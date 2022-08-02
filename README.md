@@ -17,7 +17,8 @@ tail log/flink-*-taskexecutor-*.out
 ```bash
 kubectl create sa flink
 kubectl create rolebinding flink-operator --clusterrole=flink-operator --serviceaccount=default:flink
-kubectl create -f https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.0.1/examples/basic.yaml
+kubectl create -f https://raw.githubusercontent.com/apache/flink-kubernetes-operator/release-1.1/examples/basic.yaml
 kubectl get pods
-kubectl logs basic-example-*
+kubectl port-forward svc/basic-example-rest 8081 &
+kubectl logs -f deploy/basic-example
 ```
