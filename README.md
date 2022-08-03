@@ -11,6 +11,8 @@ cd flink*
 ./bin/start-cluster.sh
 ./bin/flink run examples/streaming/WordCount.jar
 tail log/flink-*-taskexecutor-*.out
+
+python ./src/word_count.py --input ./data/livy.txt --output ./data/livy_word_count.out
 ```
 
 ## Kubernetes Cluster
