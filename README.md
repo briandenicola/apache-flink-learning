@@ -21,10 +21,19 @@ flink*/./bin/stop-cluster.sh
 
 ## Kubernetes Cluster
 ```bash
+minikube start --force #if not already running
 kubectl create sa flink
 kubectl create rolebinding flink-operator --clusterrole=flink-operator --serviceaccount=default:flink
 kubectl create -f ./manifests/basic_operations.yaml
 kubectl get pods
 kubectl port-forward svc/basic-example-rest 8081 &
 kubectl logs -f deploy/basic-example
+```
+
+### Python Order Demo
+```
+cd src
+docker build -t python_order_demo:latest .
+minikube image load python_order_demo:latest
+kubectl apply -f ../manifests/python-example.yaml
 ```
