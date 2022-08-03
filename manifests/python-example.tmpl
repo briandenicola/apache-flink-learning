@@ -21,7 +21,7 @@ kind: FlinkDeployment
 metadata:
   name: python-example
 spec:
-  image: bjd145/python_order_demo:latest
+  image: ${ACR_NAME}/python_order_demo:latest 
   flinkVersion: v1_15
   flinkConfiguration:
     taskmanager.numberOfTaskSlots: "1"

@@ -19,7 +19,7 @@ cat ./data/livy_word_count/$(date)/prefix-*
 flink*/./bin/stop-cluster.sh
 ```
 
-## Kubernetes Cluster
+## Minikube Kubernetes Cluster
 ```bash
 minikube start --force #if not already running
 kubectl create sa flink
@@ -30,10 +30,19 @@ kubectl port-forward svc/basic-example-rest 8081 &
 kubectl logs -f deploy/basic-example
 ```
 
-### Python Order Demo
+## AKS Kubernetes Cluster
 ```
-cd src
-docker build -t python_order_demo:latest .
-minikube image load python_order_demo:latest
-kubectl apply -f ../manifests/python-example.yaml
+ az login --scope https://graph.microsoft.com//.default
+
+cd infrastructure; terraform init; terraform apply -auto-approve; cd ..
+export RG=`terraform output AKS_RESOURCE_GROUP | tr -d \"`; export AKS=`terraform output AKS_CLUSTER_NAME | tr -d \"` ;\
+az aks install-cli
+az aks get-credentials -g ${RG} -n ${AKS} ;\
+kubelogin convert-kubeconfig -l azurecli
+
+export ACR_NAME=`terraform output ACR_NAME | tr -d \"`
+
+az acr login -n ${ACR_NAME}
+cd ../src; docker build -t ${ACR_NAME}/python_order_demo:latest .; docker push ${ACR_NAME}/python_order_demo:latest; cd ..
+envsubst < ./manifests/python-example.tmpl | kubectl apply -f-
 ```
