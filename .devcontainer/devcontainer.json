@@ -10,7 +10,7 @@
 		"kubectl-helm-minikube": "latest",
 		"terraform": "latest",
 		"azure-cli": "latest",
-		"java": "lts",
+		"java": "11",
 		"maven": "latest",
 		"python": "3.8"
 	},
