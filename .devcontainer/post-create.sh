@@ -4,7 +4,7 @@
 echo "$(date)    post-create start" >> ~/status
 
 echo "$(date)    Create Flink minikube cluster" >> ~/status
-minikube start --kubernetes-version=v1.21.5 --force
+minikube start --kubernetes-version=v1.24.3 --force
 
 helm repo add flink-operator-repo https://downloads.apache.org/flink/flink-kubernetes-operator-1.1.0
 helm repo add jetstack https://charts.jetstack.io

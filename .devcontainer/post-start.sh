@@ -12,6 +12,6 @@ echo 'source <(kubectl completion bash)' >> ~/.bashrc
 echo complete -F __start_kubectl k >> ~/.bashrc
 
 echo "$(date)    Create Flink minikube cluster" >> ~/status
-minikube start --kubernetes-version=v1.21.5 --force
+minikube start --kubernetes-version=v1.24.35 --force
 
 echo "$(date)    post-start complete" >> ~/status
