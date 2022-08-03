@@ -7,13 +7,16 @@ _More details pending_
 
 ## Stand-alone Cluster
 ```bash
-cd flink*
-./bin/start-cluster.sh
-./bin/flink run examples/streaming/WordCount.jar
-tail log/flink-*-taskexecutor-*.out
+flink*/bin/start-cluster.sh
+flink*/bin/flink run flink*/examples/streaming/WordCount.jar
+tail flink*/log/flink-*-taskexecutor-*.out
+
+python ./src/basic_operations.py
 
 python ./src/word_count.py --input ./data/livy.txt --output ./data/livy_word_count
 cat ./data/livy_word_count/$(date)/prefix-*
+
+flink*/./bin/stop-cluster.sh
 ```
 
 ## Kubernetes Cluster
