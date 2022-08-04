@@ -21,7 +21,6 @@ flink*/./bin/stop-cluster.sh
 
 ## Minikube Kubernetes Cluster
 ```bash
-minikube start --force #if not already running
 kubectl create sa flink
 kubectl create rolebinding flink-operator --clusterrole=flink-operator --serviceaccount=default:flink
 kubectl create -f ./manifests/basic_operations.yaml
@@ -34,15 +33,24 @@ kubectl logs -f deploy/basic-example
 ```
  az login --scope https://graph.microsoft.com//.default
 
-cd infrastructure; terraform init; terraform apply -auto-approve; cd ..
-export RG=`terraform output AKS_RESOURCE_GROUP | tr -d \"`; export AKS=`terraform output AKS_CLUSTER_NAME | tr -d \"` ;\
+cd infrastructure
+terraform init
+terraform apply -auto-approve
+
+export RG=`terraform output AKS_RESOURCE_GROUP | tr -d \"
+export AKS=`terraform output AKS_CLUSTER_NAME | tr -d \"`
+
 az aks install-cli
-az aks get-credentials -g ${RG} -n ${AKS} ;\
+az aks get-credentials -g ${RG} -n ${AKS}
 kubelogin convert-kubeconfig -l azurecli
 
 export ACR_NAME=`terraform output ACR_NAME | tr -d \"`
-
 az acr login -n ${ACR_NAME}
-cd ../src; docker build -t ${ACR_NAME}/python_order_demo:latest .; docker push ${ACR_NAME}/python_order_demo:latest; cd ..
-envsubst < ./manifests/python-example.tmpl | kubectl apply -f-
+
+cd ../src; 
+docker build -t ${ACR_NAME}/python_order_demo:latest .
+docker push ${ACR_NAME}/python_order_demo:latest
+
+cd ../manifests
+envsubst < ./python-example.tmpl | kubectl apply -f-
 ```
