@@ -6,13 +6,20 @@
 	},
 
 	"features": {
-		"docker-from-docker": "latest",
-		"kubectl-helm-minikube": "latest",
-		"terraform": "latest",
-		"azure-cli": "latest",
-		"java": "11",
-		"maven": "latest",
-		"python": "3.8"
+		"ghcr.io/devcontainers/features/azure-cli:1": {},
+		"ghcr.io/devcontainers/features/common-utils:1": {},
+		"ghcr.io/devcontainers/features/terraform:1": {},
+		"ghcr.io/devcontainers/features/docker-from-docker:1": {},
+		"ghcr.io/devcontainers/features/sshd:1": {
+			"version": "latest"
+		},
+		"ghcr.io/devcontainers/features/java:1": {
+			
+			"version": "11",
+			"installMaven": "true",
+			"installGradle": "false"
+		},
+		"ghcr.io/devcontainers/features/python:1": {}
 	},
 
 	"customizations": {
