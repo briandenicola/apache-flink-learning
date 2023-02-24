@@ -1,3 +1,7 @@
+data "azurerm_kubernetes_service_versions" "current" {
+  location = azurerm_resource_group.this.location
+}
+
 resource "azurerm_kubernetes_cluster" "this" {
   lifecycle {
     ignore_changes = [
@@ -5,14 +9,21 @@ resource "azurerm_kubernetes_cluster" "this" {
     ]
   }
 
-  name                              = local.aks_name
-  resource_group_name               = azurerm_resource_group.this.name
-  location                          = azurerm_resource_group.this.location
-  node_resource_group               = "${local.resource_name}_k8s_nodes_rg"
-  dns_prefix                        = local.aks_name
-  sku_tier                          = "Free"
-  azure_policy_enabled              = true
-  api_server_authorized_ip_ranges   = ["${chomp(data.http.myip.response_body)}/32"]
+  name                         = local.aks_name
+  resource_group_name          = azurerm_resource_group.this.name
+  location                     = azurerm_resource_group.this.location
+  node_resource_group          = "${local.resource_name}_k8s_nodes_rg"
+  dns_prefix                   = local.aks_name
+  sku_tier                     = "Free"
+  oidc_issuer_enabled          = true
+  workload_identity_enabled    = true
+  azure_policy_enabled         = true
+  local_account_disabled       = true
+  open_service_mesh_enabled    = false
+  run_command_enabled          = false
+  kubernetes_version           = data.azurerm_kubernetes_service_versions.current.versions[length(data.azurerm_kubernetes_service_versions.current.versions) - 2]
+  image_cleaner_enabled        = true
+  image_cleaner_interval_hours = 48
 
   azure_active_directory_role_based_access_control {
     managed                = true
@@ -31,6 +42,9 @@ resource "azurerm_kubernetes_cluster" "this" {
     object_id                 = azurerm_user_assigned_identity.aks_kubelet_identity.principal_id
     user_assigned_identity_id = azurerm_user_assigned_identity.aks_kubelet_identity.id
   }
+  api_server_access_profile {
+    authorized_ip_ranges = ["${chomp(data.http.myip.response_body)}/32"]
+  }
 
   default_node_pool {
     name                = "default"
@@ -40,17 +54,28 @@ resource "azurerm_kubernetes_cluster" "this" {
     vnet_subnet_id      = azurerm_subnet.this.id
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
-    min_count           = 1
-    max_count           = 2
+    min_count           = 2
+    max_count           = 6
     max_pods            = 40
+    upgrade_settings {
+      max_surge = "33%"
+    }
   }
 
   network_profile {
-    dns_service_ip     = "100.67.0.10"
-    service_cidr       = "100.67.0.0/16"
+    dns_service_ip     = "100.${random_integer.services_cidr.id}.0.10"
+    service_cidr       = "100.${random_integer.services_cidr.id}.0.0/16"
     docker_bridge_cidr = "172.17.0.1/16"
     network_plugin     = "azure"
     load_balancer_sku  = "standard"
+  }
+
+  auto_scaler_profile {
+    max_unready_nodes   = "1"
+  }
+  
+  workload_autoscaler_profile {
+    keda_enabled        = true
   }
 
   oms_agent {
