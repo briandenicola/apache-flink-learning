@@ -30,7 +30,7 @@ resource "helm_release" "flink" {
     helm_release.cert_manager
   ]
   name              = "flink-operator-repo"
-  repository        = "https://downloads.apache.org/flink/flink-kubernetes-operator-1.1.0"
+  repository        = "https://downloads.apache.org/flink/flink-kubernetes-operator-1.4.0"
   chart             = "flink-kubernetes-operator"
   namespace         = "flink"
   create_namespace  = true
