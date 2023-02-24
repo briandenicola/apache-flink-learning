@@ -1,0 +1,34 @@
+version: '3'
+
+env:
+  ENVIRONMENT: dev
+
+tasks:
+  up:
+    desc: Creates Azure environment
+    cmds:
+    - terraform -chdir=./infrastructure init
+    - terraform -chdir=./infrastructure apply -auto-approve
+    - task: creds
+    - task: skaffold
+
+  creds:
+    desc: Gets AKS credentials
+    cmds:
+    - az aks get-credentials -g {{.RG}} -n {{.AKS}} --overwrite-existing
+    - kubelogin convert-kubeconfig -l azurecli
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_RESOURCE_GROUP
+      AKS: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_CLUSTER_NAME
+
+  down:
+    desc: Cleans up Azure
+    cmds:
+    - cd infrastructure ;
+      rm -rf .terraform.lock.hcl .terraform terraform.tfstate terraform.tfstate.backup .terraform.tfstate.lock.info
+    - az group delete -n {{.RG}} --yes || true
+    vars:
+      RG: 
+        sh: terraform -chdir=./infrastructure output -raw AKS_RESOURCE_GROUP
