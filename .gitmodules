@@ -1,3 +1,6 @@
 [submodule "flink-sql-demo"]
 	path = flink-sql-demo
 	url = https://github.com/wuchong/flink-sql-demo.git
+[submodule "flink-operator"]
+	path = flink-operator
+	url = https://github.com/apache/flink-kubernetes-operator
